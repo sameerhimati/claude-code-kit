@@ -29,6 +29,10 @@ done
 | `/techdebt` | **techdebt-scanner** — find duplication, dead code, TODOs |
 | `/handoff` | **session-handoff** — generate handoff prompt for next session |
 | `/research [topic]` | **research** — parallel subagent research |
+| `/design [project]` | **design-philosophy** — interactive Q&A → generates design.md |
+| `/railway [desc]` | **railway-deploy** — deploy to Railway without leaving terminal |
+| `/cloudflare [desc]` | **cloudflare-setup** — Workers, D1, KV setup and deploy |
+| `/oauth [provider]` | **oauth-setup** — step-by-step OAuth provider setup with code gen |
 | (auto) | **nextjs-patterns** — Next.js App Router conventions |
 | (auto) | **python-fastapi-patterns** — FastAPI conventions |
 
@@ -39,4 +43,5 @@ done
 | reviewer | Sonnet | Code review for bugs, style, security, performance |
 | planner | Opus | Codebase exploration → implementation plan |
 | doc-updater | Haiku | Update docs after feature completion |
-| security-scanner | Sonnet | Vulnerability scanning |
+| security-scanner | Sonnet | Quick vulnerability scanning |
+| security-auditor | Opus | Deep security audit targeting AI-generated code weaknesses |
