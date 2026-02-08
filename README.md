@@ -28,6 +28,7 @@ done
 | `/feature [desc]` | **feature-flow** — plan → build → test → review → commit |
 | `/techdebt` | **techdebt-scanner** — find duplication, dead code, TODOs |
 | `/handoff` | **session-handoff** — generate handoff prompt for next session |
+| `/verify` | **verify** — run, test, spin up server, loop until green |
 | `/research [topic]` | **research** — parallel subagent research |
 | `/design [project]` | **design-philosophy** — interactive Q&A → generates design.md |
 | `/railway [desc]` | **railway-deploy** — deploy to Railway without leaving terminal |

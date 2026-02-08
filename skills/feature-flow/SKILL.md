@@ -25,9 +25,15 @@ Present plan. Wait for confirmation.
 - Comments only for non-obvious logic
 
 ## Step 4: Verify
-- Run existing tests
-- Write new tests for the feature
-- Run linting/type-checking
+Run the /verify skill. This will:
+- Lint and type-check
+- Run tests (write new ones for the feature first)
+- Build the project
+- Spin up local server and smoke test endpoints
+- Loop up to 3x on any failure, fixing as it goes
+- Only proceed when green (or report what's stuck)
+
+Do NOT skip this step. Do NOT move to review until verify passes.
 
 ## Step 5: Review
 Spawn reviewer agent. Address any 🔴 Critical items.
