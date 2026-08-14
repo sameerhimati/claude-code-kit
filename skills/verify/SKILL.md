@@ -1,7 +1,7 @@
 ---
 name: verify
-description: Run, test, and verify code actually works. Spins up local servers, runs tests, checks types/lint, and loops until green or reports what's stuck.
-disable-model-invocation: true
+description: Use after writing or modifying code to verify it works. Runs lint, type-check, tests, build, and server smoke tests with a 3-attempt fix loop. Auto-triggered after implementation steps or invoke with /verify.
+disable-model-invocation: false
 allowed-tools: Bash, Read, Write, Edit, Glob, Grep
 ---
 
@@ -41,73 +41,21 @@ Report what was detected. If unsure, ask the user.
 
 ### 2a. Type Check / Lint
 Run type checker and linter first — fastest feedback.
-
-```
-If errors → read the errors → fix → re-run
-Max 3 attempts per check
-```
+If errors → read the errors → fix → re-run. Max 3 attempts per check.
 
 ### 2b. Tests
 Run the test suite.
-
-```
-If failures → read the failure output → identify root cause → fix → re-run
-Max 3 attempts
-```
+If failures → read the failure output → identify root cause → fix → re-run. Max 3 attempts.
 
 ### 2c. Build
 Run the build command (if applicable). Catches issues tests might miss.
-
-```
-If build fails → read errors → fix → re-run
-Max 3 attempts
-```
+If build fails → read errors → fix → re-run. Max 3 attempts.
 
 ### 2d. Server Smoke Test
 Spin up the local server and verify it starts and responds:
 
-**FastAPI:**
-```bash
-# Start server in background
-uvicorn app.main:app --host 0.0.0.0 --port 8000 &
-SERVER_PID=$!
-sleep 3
-
-# Hit health endpoint
-curl -s -o /dev/null -w "%{http_code}" http://localhost:8000/health
-
-# Hit any new/changed endpoints relevant to current work
-curl -s http://localhost:8000/[endpoint]
-
-# Kill server
-kill $SERVER_PID
-```
-
-**Next.js:**
-```bash
-# Start dev server in background
-npm run dev &
-SERVER_PID=$!
-sleep 5
-
-# Check it responds
-curl -s -o /dev/null -w "%{http_code}" http://localhost:3000
-
-# Kill server
-kill $SERVER_PID
-```
-
-If the server fails to start:
-```
-Read the error output → fix → restart → re-check
-Max 3 attempts
-```
-
-If endpoints return unexpected status codes or errors:
-```
-Read the response → trace the issue → fix → restart → re-check
-Max 3 attempts
-```
+If the server fails to start or endpoints return unexpected status codes:
+Read the error output → fix → restart → re-check. Max 3 attempts.
 
 ## Step 3: Feedback Loop Rules
 
@@ -134,7 +82,7 @@ For EVERY failure:
 
 ### All Green
 ```
-✅ Verified
+Verified
 
 - Lint: passed
 - Types: passed
@@ -148,7 +96,7 @@ Ready for review.
 
 ### Blocked
 ```
-⚠️ Verification blocked after 3 attempts
+Verification blocked after 3 attempts
 
 **Failing check:** [which one]
 **Error:** [concise error]
@@ -158,8 +106,28 @@ Ready for review.
 3. [what was tried]
 
 **Root cause:** [best assessment]
-**Needs:** [what's required to unblock — env var, dependency, user decision, etc.]
+**Needs:** [what's required to unblock]
 ```
+
+## IRON LAW
+**NO SHIP CLAIMS WITHOUT FRESH TEST EVIDENCE.** "It worked before" is not evidence. "I just ran it and here's the output" is evidence. Every verify must produce fresh results.
+
+## Completion Status
+
+End every verify run with one of:
+```
+STATUS: DONE — All checks green. Ready for review.
+STATUS: DONE_WITH_CONCERNS — Passing, but [specific concern].
+STATUS: BLOCKED — Failed after 3 attempts. [What's needed to unblock.]
+STATUS: NEEDS_CONTEXT — Can't determine how to test. [What info is needed.]
+```
+
+## Anti-Patterns
+- BAD: "Tests passed last time, should still work." (RUN THEM AGAIN. Freshness matters.)
+- BAD: Modifying test assertions to match broken behavior. (Fix the code, not the tests.)
+- BAD: "Build succeeded so it works." (Build passing ≠ functionality working. Run the server.)
+- BAD: Skipping the server smoke test to save time. (The server test catches what unit tests miss.)
+- BAD: "I'll fix that lint warning later." (Fix it now. It costs 10 seconds.)
 
 ## Rules
 - Always clean up background processes (kill servers when done)

@@ -1,6 +1,6 @@
 ---
 name: session-handoff
-description: Write session handoff to session-handoff.md for the next session's /kickoff to read. Always updates the existing file, never creates a second one.
+description: End a work session and persist context for the next one. Writes session-handoff.md with completed work, current state, blockers, and next priorities. Invoke manually with /session-handoff.
 disable-model-invocation: false
 allowed-tools: Bash, Read, Write, Edit, Glob, Grep
 ---
@@ -15,6 +15,17 @@ allowed-tools: Bash, Read, Write, Edit, Glob, Grep
 5. Read roadmap.md if it exists
 6. Read existing session-handoff.md if it exists (to preserve history context)
 
+## Plan Mode Discussion
+
+**Enter plan mode before writing the handoff.** Have a back-and-forth conversation with the user:
+
+1. **Reflect on the session** — what actually got done vs what was planned? What surprised us?
+2. **Surface open questions** — anything unresolved that the next session needs to address?
+3. **Discuss next session priorities** — don't just list tasks, discuss what matters most and why. Get the user's input on ordering.
+4. **Capture non-obvious context** — decisions made, things that almost broke, context that would take time to rediscover
+
+Only write the handoff file after this conversation. The discussion ensures the handoff captures what actually matters, not just a mechanical dump of git state.
+
 ## Write to session-handoff.md
 
 **CRITICAL: If session-handoff.md already exists, OVERWRITE it. Do NOT create session-handoff-2.md or any variant. One file, always updated in place.**
@@ -23,46 +34,36 @@ Use the Write tool (or Edit tool if updating specific sections) to write `sessio
 
 ```markdown
 # Session Handoff
-> **Last session:** [YYYY-MM-DD] — [short topic, e.g. "Phase 2A core models"]
-> **Current frame:** [ONE sentence describing what we're actually building. Rewritten ONLY when the strategic framing changes — most sessions inherit the frame from the previous handoff unchanged. A future-me reading this cold should know within 5 seconds what we're building and why.]
+> Last updated: [date and time]
 
 ## Completed This Session
-- [x] [what was actually done — include the key decision or insight, not just the diff. Git log has the diff; this section has the meaning.]
+- [x] [from git log — what was done this session]
 
 ## Current State
 - **Branch:** [current branch]
 - **Last commit:** [hash + message]
-- **Tests:** [N passing / failing / added this session]
 - **Build:** [passing/failing/unknown]
 - **Uncommitted changes:** [yes/no — list files if yes]
+- **Blockers:** [any blockers or "none"]
 
-## Next Action
-[ONE thing. The next concrete action to take. Not a menu, not a 6-task breakdown. If the work has more structure, point at the plan doc (e.g. "see docs/block2-plan.md §3") instead of re-listing. Optional "After that:" line for immediate follow-up context, but the primary focus is singular.]
-
-## Blockers
-[External things waiting on input: legal consults, partnership asks, customer meetings, handoffs from others. "None" is a valid answer. Do not pad.]
+## Next Session Should
+1. **Opening gambit:** [specific first move — file to open + exact action. Not "continue atlas work" but "Open projects/atlas/decision-data-model.md, finish entity boundaries section"]
+2. [second priority]
+3. [additional items from roadmap]
 
 ## Context to Remember
-[Session-specific things that aren't in CLAUDE.md and will decay over time:
-- Mid-work decisions not yet durable
-- Emotional state if relevant to next session judgment
-- Gotchas discovered this session
-- Things that would take time to re-discover
-
-This section SHRINKS over time. When something becomes durable, move it to CLAUDE.md. When it becomes irrelevant, delete it.]
+- [architectural decisions made and why]
+- [gotchas discovered during this session]
+- [things that almost broke or were tricky]
+- [dependencies or external setup that was done]
 
 ## Start Command
-```bash
-[specific command to resume work]
-```
+`[specific command to resume work, e.g. "cd api && source venv/bin/activate && uvicorn app.main:app --reload"]`
 ```
 
 ## Rules
 - Always write to `session-handoff.md` in the project root
 - If the file exists, replace its contents entirely — do not append or create duplicates
-- **Current frame is load-bearing.** A future-me reading the handoff cold should know within 5 seconds what we're building. Inherit it unchanged from the previous handoff unless a strategic reframe happened in this session.
-- **Next Action is singular, not a list.** If there's more structure, point at the plan doc. This forces focus and avoids rework when plans change.
-- **Blockers are honest.** If nothing is blocking, write "none." If something is waiting on external input, say what specifically. Don't pad.
-- **Context to Remember decays.** This is the section that should shrink over time. Durable items graduate to CLAUDE.md; irrelevant items get deleted. If it's growing every session, something's wrong.
-- **Architectural decisions live in CLAUDE.md, not here.** Don't duplicate them across handoffs — they get re-debated that way.
-- Keep it concise. Target 60–120 lines. This is a handoff, not a diary.
+- "Next Session Should #1" must be a concrete opening gambit (file + action) so the handoff functions as a cold-start prompt at kickoff. Items 2+ can be looser.
+- "Context to Remember" is the most valuable section — capture things that would take time to re-discover
+- Keep it concise. This is a handoff, not a diary.
