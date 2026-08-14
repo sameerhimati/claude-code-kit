@@ -30,6 +30,7 @@ done
 | `/handoff` | **session-handoff** — generate handoff prompt for next session |
 | `/verify` | **verify** — run, test, spin up server, loop until green |
 | `/research [topic]` | **research** — parallel subagent research |
+| `/deslop [file]` | **deslop** — strip the tells that mark prose as LLM-written, without rewriting the author's voice; opt-in plain-English mode |
 | `/design [project]` | **design-philosophy** — interactive Q&A → generates design.md |
 | `/railway [desc]` | **railway-deploy** — deploy to Railway without leaving terminal |
 | `/cloudflare [desc]` | **cloudflare-setup** — Workers, D1, KV setup and deploy |
