@@ -37,7 +37,7 @@ done
 | `/ux-audit` | walk the live app as a persona; catalog friction, then fix it |
 | `/glow-up` | de-slop a UI in four waves until a scored rubric passes |
 | `/prototype` | turn an idea into a working clickable prototype |
-| `/deslop` | strip the tells that mark prose as LLM-written; opt-in plain-English mode |
+| `/deslop` | strip the tells that mark prose as LLM-written. Authorship picks the mode, surface picks the register — the docs register answers to the Google developer documentation style guide |
 | `/research` | parallel subagent research across web, codebase, community |
 | `/think` | open-ended strategic thinking partner |
 | `/office-hours` | YC-style forcing questions, or builder-mode brainstorming |
@@ -52,10 +52,15 @@ done
 | `/oss` | make-a-repo-public audit: secrets, docs, license, stranger test |
 | `/deploy` | deploy a project to Railway or Cloudflare Workers |
 | `/config-audit` | maintain `~/.claude` itself: drift, bloat, dead skills |
+| (auto) | **hallmark** — anti-AI-slop design skill: macrostructures, themes, a 58-gate slop test. Vendored from [Nutlope/hallmark](https://github.com/Nutlope/hallmark), MIT |
 | (auto) | **claude-api** — Claude API reference: models, pricing, caching, tool use |
 | (auto) | **use-railway** — operate Railway infra: projects, services, domains, debugging |
 
 Conventions for writing skills: [`skills/_conventions.md`](skills/_conventions.md) · lint them with [`skills/_skill-lint.md`](skills/_skill-lint.md).
+
+**Third-party:** `skills/hallmark/` is [Nutlope/hallmark](https://github.com/Nutlope/hallmark) vendored whole, under its own MIT licence at `skills/hallmark/LICENSE`. Not my work. Its `references/` tree expects `docs/` and `site/css/tokens.css` two levels above the skill, so a symlink install needs those too — see the upstream repo.
+
+**Not mirrored:** `rules/writing-voice.md` stays local. `/deslop` reads it for voice work and degrades gracefully without it — you get the tell-stripping, not the voice rewrite. Point that path at your own voice notes if you want the second half.
 
 ## Agents
 
